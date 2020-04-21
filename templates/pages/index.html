@@ -1,7 +1,8 @@
+
 {% extends 'base.html' %}
 
-{%block content%}
-
+{% block content %}
+  
 <!-- Showcase -->
 <section id="showcase>
   <div class="container text-center">
@@ -13,18 +14,23 @@
             <div class="form-row">
               <div class="col-md-4 mb-3">
                 <label class="sr-only">Subject</label>
-                <input type="text" name="subject" class="form-control" placeholder="Subject">
+                <input type="text" name="subject" class="form-control" placeholder="Subject" value="{{values.subject}}">
               </div>
               <div class="col-md-4 mb-3">
                 <label class="sr-only">Instructor</label>
-                <input type="text" name="instructor" class="form-control" placeholder="Instructor">
+                <input type="text" name="instructor" class="form-control" placeholder="Instructor" value="{{values.instructor}}">
               </div>
               <div class="col-md-3 mb-3">
                 <label class="sr-only">Level</label>
-                <select name="state" class="form-control">
+                <select name="level" class="form-control">
                   <option selected="true" disabled="disabled">Level (All)</option>
                   {% for cat in categories %}
-                  <option value="{{cat.id}}">{{cat.name}}</option>
+                  <option value="{{cat.id}}"  
+                    {% if  values.level == cat.id %}
+                       selected
+                    {% endif %}>
+                    {{cat.name}}                  
+                    </option>
                   {% endfor %}                  
                 </select>
               </div>              
@@ -38,118 +44,89 @@
     </div>
   </div>
 </section>
+ <!--Alerts-->
+{% include 'partials/_alert.html' %}
 
-<!-- Listings -->
-<section id="listings" class="py-4">
-  <div class="container">
-    <div class="row">
-      {% if courses %}
-        {% for course in courses %}
-        <div class="col-md-6 col-lg-4 mb-4">
-          <div class="card listing-preview">
-            <img class="card-img-top" src="{{course.photo.url}}" alt="">             
-            <div class="card-body">
-              <div class="listing-heading text-center">
-                <h3 class="text-primary">{{course.title}}</h3><br/>
+ <!-- Listings -->
+ <section id="listings" class="py-4">
+    <div class="container">
+      <div class="row">
+        {% if courses %}
+          {% for course in courses %}
+          <div class="col-md-6 col-lg-4 mb-4">
+            <div class="card listing-preview">
+              <img class="card-img-top" src="{{course.photo.url}}" alt="">             
+              <div class="card-body">
+                <div class="listing-heading text-center">
+                  <h3 class="text-primary">{{course.title}}</h3><br/>
+                  <hr>
+                  <h5 class="text-primary">by {{course.instructor}}</h5>
+                  <h4> ${{course.price}}</h4>
+                </div>
                 <hr>
-                <h5 class="text-primary">by {{course.instructor}}</h5>
-                <h4> ${{course.price}}</h4>
+                <div class="row py-2 text-secondary">
+                  <div class="col-10">
+                    <i class="fas fa-calendar"></i> Created on: {{course.created_date | timesince}}
+                  </div>                
+                </div>
+                <div class="row py-2 text-secondary">
+                  <div class="col-10">
+                    <i class="fas fa-user"></i> 1025 
+                  </div>                  
+                </div>
+                <hr>
+                <a href="{% url 'course' course.id %}" class="btn btn-primary btn-block">More Info</a>
               </div>
-              <hr>
-              <div class="row py-2 text-secondary">
-                <div class="col-10">
-                  <i class="fas fa-calendar"></i> Created on: {{course.created_date | timesince}}
-                </div>                
-              </div>
-              <div class="row py-2 text-secondary">
-                <div class="col-10">
-                  <i class="fas fa-user"></i> 1025 
-                </div>                  
-              </div>
-              <hr>
-              <a href="{% url 'course' course.id %}" class="btn btn-primary btn-block">More Info</a>
             </div>
           </div>
-        </div>
-        {% endfor %}
-      {% else %}
-         <div class="col-md-12">
-           <p>
-             No Courses Available
-           </p>
-         </div>
-      {% endif %}
-    </div>
-    <div class="row">
-      <div class="col-md-12">
-        {% if courses.has_other_pages %}
-          <ul class="pagination">
-            {% if courses.has_previous %}
-              <li class="page-item">
-                <a href="?page={{courses.previous_page_number}}" class="link">&laquo;</a>
-               </li>
-            {% else %}
-              <li class="page_item disabled">
-                <a href="" class="page-link">&laquo;</a>
-              </li>
-            {% endif %} 
-            {% for i in courses.paginator.page_range %}
-              {% if courses.number == i %}
-                <li class="page-item active">
-                  <a  class="page-link">{{i}}</a>
-                </li>
-              {% else %}
-                <li class="page-item">
-                  <a href="?page={{i}}" class="page-link">{{i}}</a>
-                </li>
-              {% endif %}
-            {% endfor %}
-            {% if courses.has_next %}
-              <li class="page-item">
-                <a href="?page={{courses.next_page_number}}" class="link">&raquo;</a>
-               </li>
-            {% else %}
-              <li class="page_item disabled">
-                <a  class="page-link">&raquo;</a>
-              </li>
-            {% endif %} 
-          </ul>
+          {% endfor %}
+        {% else %}
+           <div class="col-md-12">
+             <p>
+               No Courses Available
+             </p>
+           </div>
         {% endif %}
+      </div>
+      <div class="row">
+        <div class="col-md-12">
+          {% if courses.has_other_pages %}
+            <ul class="pagination">
+              {% if courses.has_previous %}
+                <li class="page-item">
+                  <a href="?page={{courses.previous_page_number}}" class="link">&laquo;</a>
+                 </li>
+              {% else %}
+                <li class="page_item disabled">
+                  <a href="" class="page-link">&laquo;</a>
+                </li>
+              {% endif %} 
+              {% for i in courses.paginator.page_range %}
+                {% if courses.number == i %}
+                  <li class="page-item active">
+                    <a  class="page-link">{{i}}</a>
+                  </li>
+                {% else %}
+                  <li class="page-item">
+                    <a href="?page={{i}}" class="page-link">{{i}}</a>
+                  </li>
+                {% endif %}
+              {% endfor %}
+              {% if courses.has_next %}
+                <li class="page-item">
+                  <a href="?page={{courses.next_page_number}}" class="link">&raquo;</a>
+                 </li>
+              {% else %}
+                <li class="page_item disabled">
+                  <a  class="page-link">&raquo;</a>
+                </li>
+              {% endif %} 
+            </ul>
+          {% endif %}
 
+        </div>
       </div>
     </div>
-  </div>
-</section>
+  </section>
 
-<section id="services" class="py-5 bg-secondary text-white">
-  <div class="container">
-    <div class="row text-center">
-      <div class="col-md-4">
-        <i class="fas fa-comment fa-4x mr-4"></i>
-        <hr>
-        <h3>Consulting Services</h3>
-        <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Incidunt, debitis nam! Repudiandae, provident iste
-          consequatur
-          hic dignissimos ratione ea quae.</p>
-      </div>
-      <div class="col-md-4">
-        <i class="fas fa-home fa-4x mr-4"></i>
-        <hr>
-        <h3>Propery Management</h3>
-        <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Incidunt, debitis nam! Repudiandae, provident iste
-          consequatur
-          hic dignissimos ratione ea quae.</p>
-      </div>
-      <div class="col-md-4">
-        <i class="fas fa-suitcase fa-4x mr-4"></i>
-        <hr>
-        <h3>Renting & Selling</h3>
-        <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Incidunt, debitis nam! Repudiandae, provident iste
-          consequatur
-          hic dignissimos ratione ea quae.</p>
-      </div>
-    </div>
-  </div>
-</section>
-
-{%endblock%}
+{% endblock %}

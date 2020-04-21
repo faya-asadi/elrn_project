@@ -146,3 +146,7 @@ STATICFILES_DIRS
 STATICFILES_STORAGE
 STATICFILES_FINDERS 
 '''
+from django.contrib.messages import constants as messages
+MESSAGE_TAGS= {
+   messages.ERROR: 'danger'
+}

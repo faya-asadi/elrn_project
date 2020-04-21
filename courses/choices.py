@@ -1,5 +1,5 @@
 levels = {
   "beginner" : "Beginner",
-  "intermidiate" : "!ntermidiate",
+  "intermidiate" : "Intermidiate",
   "advanced" : "Advanced"
 }

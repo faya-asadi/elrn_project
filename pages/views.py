@@ -13,8 +13,7 @@ def index(request):
      page_number = request.GET.get('page')
      page_courses = paginator.get_page(page_number)
      categories = Category.objects.all()
-     context = {'courses': page_courses,
-     'levels': levels,
+     context = {'courses': page_courses,     
      'categories':categories}
      return render(request, 'pages/index.html', context)
      

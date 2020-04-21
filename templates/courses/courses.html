@@ -18,6 +18,49 @@
     </div>
   </section>
 
+  
+<!-- Showcase -->
+<section id="showcase>
+  <div class="container text-center">
+    <div class="home-search p-2">
+      <div class="overlay p-2">       
+        <div class="search">
+          <form action="{% url 'search' %}">
+            <!-- Form Row 1 -->
+            <div class="form-row">
+              <div class="col-md-4 mb-3">
+                <label class="sr-only">Subject</label>
+                <input type="text" name="subject" class="form-control" placeholder="Subject" value="{{values.subject}}">
+              </div>
+              <div class="col-md-4 mb-3">
+                <label class="sr-only">Instructor</label>
+                <input type="text" name="instructor" class="form-control" placeholder="Instructor" value="{{values.instructor}}">
+              </div>
+              <div class="col-md-3 mb-3">
+                <label class="sr-only">Level</label>
+                <select name="level" class="form-control">
+                  <option selected="true" disabled="disabled">Level (All)</option>
+                  {% for cat in categories %}
+                  <option value="{{cat.id}}"  
+                    {% if  values.level == cat.id %}
+                       selected
+                    {% endif %}>
+                    {{cat.name}}                  
+                    </option>
+                  {% endfor %}                  
+                </select>
+              </div>              
+              <div class="col-md-1 mb-3 form-row">
+                <button class="btn btn-secondary btn-block mt-1" type="submit">Search</button>
+              </div>
+            </div>            
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
  <!-- Listings -->
  <section id="listings" class="py-4">
     <div class="container">

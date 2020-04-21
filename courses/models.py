@@ -1,4 +1,5 @@
 from django.db import models
+from enum import IntEnum, EnumMeta
 from datetime import datetime
 from instructors.models import Instructor
 from categories.models import Category
@@ -8,7 +9,7 @@ class Course(models.Model):
     category =  models.ForeignKey(Category, on_delete=models.DO_NOTHING)
     title = models.CharField(max_length = 200)
     description = models.TextField()
-    level = models.IntegerChoices('level', 'beginner intermediate advanced') # enum
+   # level = models.IntegerChoices('level', 'beginner intermediate intermediate') # enum
     photo = models.ImageField(upload_to="photos/courses")
     price = models.DecimalField(max_digits =6, decimal_places=2)
     is_published = models.BooleanField(default=True)
